@@ -24,16 +24,19 @@ class BioTimeLapse(object):
         return '/home/pi/images/diybio_{0}.jpg'.format(datetime.now().strftime("%Y-%m-%d_%H_%M_%S.%f"))
 
     def upload_to_s3(self,file, access_key, access_secret_key):
-        client = boto3.client(
-            's3',
-            aws_access_key_id=ACCESS_KEY_ID,
-            aws_secret_access_key=SECRET_ACCESS_KEY,
-        )
+        # client = boto3.client(
+        #     's3',
+        #     aws_access_key_id=ACCESS_KEY_ID,
+        #     aws_secret_access_key=SECRET_ACCESS_KEY,
+        #)
+        s3 = boto3.resource('s3')
         filename = time.strftime("%Y%m%d-%H%M%S") + '_warehouse.jpg'
         print 'inside upload'
         print file
         print filename
-        client.upload_file(file, 'famduino', filename, ExtraArgs={'ContentType': 'image/jpeg'})
+        data = open(file, 'rb')
+        s3.Bucket('familabbiocam').put_object(Key=filename, Body=data)
+        #client.upload_file(file, 'famduino', filename, ExtraArgs={'ContentType': 'image/jpeg'})
         #client.upload_file(file, 'famduino', ExtraArgs={'ContentType': 'image/jpeg'})
         url = '{}/{}'.format('http://familabbiocam.s3-website-us-east-1.amazonaws.com', filename)
         return url
