@@ -43,7 +43,8 @@ class Collector(object):
 
     def save_console(self, data):
        # print "{0} Current temp_c: {1}, temp_f: {2}".format(*data)
-        print "{0} Current temp_c: {1}, temp_f: {2}, album {3}, image {4}".format(*data)
+       print "{0} Current temp_c: {1}, temp_f: {2}, album {3}, image {4}".format(*data)
+       # print "{0} Current temp_c: {1}, temp_f: {2}, image {3}".format(*data)
     def collect_forever(self):
         while True:
             now = datetime.now()
@@ -53,10 +54,9 @@ class Collector(object):
             self.save_csv(data)
             self.save_thingspeak(data)
             time.sleep(WAIT_TIME_SECONDS)
-            
+
 
 if __name__ == "__main__":
 #    with daemon.DaemonContext():
         collector = Collector()
         collector.collect_forever()
-
